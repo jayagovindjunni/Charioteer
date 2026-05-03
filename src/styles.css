@@ -56,6 +56,7 @@ p {
 
 .intake-brand-bar {
   align-self: start;
+  margin-bottom: 6px;
 }
 
 .intake-copy__body {
@@ -66,66 +67,78 @@ p {
   min-height: 0;
 }
 
-.brand-mark {
-  display: block;
-  flex-shrink: 0;
-}
-
-.brand-nav {
+/* Official lockup PNG — matte black panel + subtle gold framing for a classic stationery feel */
+.brand-lockup {
   display: inline-flex;
-  align-items: flex-start;
-  gap: 10px;
+  flex-direction: column;
+  align-items: stretch;
   max-width: 100%;
 }
 
-.brand-nav--compact {
-  align-items: center;
-  gap: 8px;
+.brand-lockup__img {
+  display: block;
+  width: auto;
+  height: auto;
 }
 
-.brand-nav__text {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 0;
-  padding-top: 2px;
+.brand-lockup--intake {
+  align-self: flex-start;
+  padding: 16px 22px;
+  border-radius: 12px;
+  background: radial-gradient(
+    145% 120% at 12% -10%,
+    rgba(212, 175, 55, 0.12) 0%,
+    #030303 38%,
+    #010101 100%
+  );
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.85),
+    0 12px 32px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
-.brand-nav--compact .brand-nav__text {
-  padding-top: 0;
+.brand-lockup--intake .brand-lockup__img {
+  max-height: clamp(52px, 6.5vw, 68px);
+  max-width: min(100%, 420px);
+  object-fit: contain;
+  object-position: left center;
 }
 
-.brand-nav__wordmark {
-  font-family: Poppins, ui-sans-serif, system-ui, sans-serif;
-  font-weight: 600;
-  font-size: 1.0625rem;
-  letter-spacing: 0.08em;
-  line-height: 1.22;
-  color: rgba(248, 255, 251, 0.97);
+.brand-lockup--intake .brand-lockup__rule {
+  display: block;
+  height: 1px;
+  margin-top: 14px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212, 175, 55, 0.45) 25%,
+    rgba(212, 175, 55, 0.75) 50%,
+    rgba(212, 175, 55, 0.45) 75%,
+    transparent 100%
+  );
+  opacity: 0.9;
 }
 
-.brand-nav--compact .brand-nav__wordmark {
-  font-size: 0.9375rem;
-  letter-spacing: 0.085em;
+.brand-lockup--compact {
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: linear-gradient(165deg, #0a0a0a 0%, #020202 100%);
+  border: 1px solid rgba(212, 175, 55, 0.24);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
-.brand-nav__tagline {
-  font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 0.6875rem;
-  font-weight: 400;
-  letter-spacing: 0.065em;
-  line-height: 1.38;
-  color: rgba(248, 255, 251, 0.5);
-  text-transform: none;
+.brand-lockup--compact .brand-lockup__img {
+  max-height: 38px;
+  max-width: min(100%, 280px);
+  object-fit: contain;
+  object-position: left center;
 }
 
 .app-header__brand {
   margin-bottom: 14px;
-}
-
-.app-header .brand-nav__wordmark {
-  color: #15221c;
 }
 
 .intake-copy h1 {
