@@ -16,6 +16,7 @@ import {
   Trophy
 } from 'lucide-react';
 import './styles.css';
+import { BrandNav } from './BrandNav.jsx';
 
 const STORAGE_KEY = 'charioteer-curriculum-v2';
 
@@ -319,22 +320,20 @@ function App() {
     return (
       <main className="intake-page">
         <section className="intake-copy">
-          <div className="brand">
-            <img
-              className="brand-logo"
-              src="/charioteer-logo.png"
-              alt="Charioteer — Without structure, knowledge is noise."
-            />
+          <header className="intake-brand-bar" aria-label="Charioteer">
+            <BrandNav variant="intake" />
+          </header>
+          <div className="intake-copy__body">
+            <h1>Stop guessing what to learn next.</h1>
+            <p className="intake-subhead">Turn any goal into a clear, structured learning path.</p>
+            <p className="intake-tagline">
+              Without structure, knowledge is noise. Clarity turns information into power.
+            </p>
+            <p className="intake-body">
+              Get a personalized, day-by-day plan with lessons, practice, and checkpoints—designed for your level and
+              your goal.
+            </p>
           </div>
-          <h1>Stop guessing what to learn next.</h1>
-          <p className="intake-subhead">Turn any goal into a clear, structured learning path.</p>
-          <p className="intake-tagline">
-            Without structure, knowledge is noise. Clarity turns information into power.
-          </p>
-          <p className="intake-body">
-            Get a personalized, day-by-day plan with lessons, practice, and checkpoints—designed for your level and
-            your goal.
-          </p>
         </section>
 
         <form className="intake-form" onSubmit={generatePlan}>
@@ -438,12 +437,8 @@ function App() {
     <main className="curriculum-page">
       <header className="app-header">
         <div>
-          <div className="brand compact">
-            <img
-              className="brand-logo brand-logo-compact"
-              src="/charioteer-logo.png"
-              alt="Charioteer"
-            />
+          <div className="app-header__brand">
+            <BrandNav variant="compact" />
           </div>
           <h1>{appState.intake.topic}</h1>
           <p>
