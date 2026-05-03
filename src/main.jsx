@@ -12,7 +12,6 @@ import {
   Mic,
   PlaySquare,
   RefreshCw,
-  Sparkles,
   Target,
   Trophy
 } from 'lucide-react';
@@ -191,7 +190,7 @@ function App() {
       }));
       setGenerationStatus(
         result.source === 'gemini' || result.source === 'openai'
-          ? `Generated with ${result.source}.`
+          ? 'Powered by AI with structured learning.'
           : result.source === 'ai-error-fallback'
             ? `AI unavailable: ${result.error || 'unknown issue'}. Local draft was created.`
             : 'Generated with local fallback. Add your Gemini API key to .env for AI planning.'
@@ -277,7 +276,7 @@ function App() {
       }));
       setGenerationStatus(
         result.source === 'gemini' || result.source === 'openai'
-          ? `Plan recalculated with ${result.source}.`
+          ? 'Powered by AI with structured learning.'
           : result.source === 'ai-error-fallback'
             ? `AI unavailable: ${result.error || 'unknown issue'}. Local planner updated it.`
             : 'Plan recalculated with local fallback. Add your Gemini API key to .env for AI recalculation.'
@@ -321,19 +320,26 @@ function App() {
       <main className="intake-page">
         <section className="intake-copy">
           <div className="brand">
-            <Sparkles size={24} />
-            <strong>Charioteer</strong>
+            <img
+              className="brand-logo"
+              src="/charioteer-logo.png"
+              alt="Charioteer — Without structure, knowledge is noise."
+            />
           </div>
-          <h1>Tell us what you want to learn. We will turn it into a curriculum.</h1>
-          <p>
-            The app starts from what you already know, chooses the right depth, and creates a day-by-day
-            learning path with organized YouTube lessons, practice, journals, and tests.
+          <h1>Stop guessing what to learn next.</h1>
+          <p className="intake-subhead">Turn any goal into a clear, structured learning path.</p>
+          <p className="intake-tagline">
+            Without structure, knowledge is noise. Clarity turns information into power.
+          </p>
+          <p className="intake-body">
+            Get a personalized, day-by-day plan with lessons, practice, and checkpoints—designed for your level and
+            your goal.
           </p>
         </section>
 
         <form className="intake-form" onSubmit={generatePlan}>
           <label className="wide">
-            What do you need to learn or know about?
+            What do you want to master?
             <input
               autoFocus
               placeholder="Example: Python for data analysis, machine learning, React, finance..."
@@ -343,7 +349,7 @@ function App() {
           </label>
 
           <ChoiceGroup
-            label="What do you already know about it?"
+            label="Your current level"
             value={appState.intake.currentLevel}
             options={[
               ['beginner', 'Beginner'],
@@ -354,7 +360,7 @@ function App() {
           />
 
           <ChoiceGroup
-            label="Which teaching language do you prefer?"
+            label="Preferred learning language"
             value={appState.intake.preferredLanguage}
             options={[
               ['english', 'English'],
@@ -368,14 +374,14 @@ function App() {
           />
 
           <ChoiceGroup
-            label="Why are you learning this?"
+            label="Your goal"
             value={appState.intake.purpose}
             options={Object.entries(purposeLabels)}
             onChange={(value) => updateIntake('purpose', value)}
           />
 
           <ChoiceGroup
-            label="How deep should the plan go?"
+            label="Target level"
             value={appState.intake.targetLevel}
             options={[
               ['beginner', 'Basic understanding'],
@@ -387,7 +393,7 @@ function App() {
 
           <div className="split-fields">
             <label>
-              Finish in
+              Duration
               <input
                 type="number"
                 min="1"
@@ -396,7 +402,7 @@ function App() {
               />
             </label>
             <label>
-              Time unit
+              Timeframe
               <select
                 value={appState.intake.durationUnit}
                 onChange={(event) => updateIntake('durationUnit', event.target.value)}
@@ -406,7 +412,7 @@ function App() {
               </select>
             </label>
             <label>
-              Study hours per day
+              Daily study time (hours)
               <input
                 type="number"
                 min="0.5"
@@ -420,7 +426,7 @@ function App() {
 
           <button className="primary-action" type="submit" disabled={isGenerating}>
             <ListChecks size={19} />
-            {isGenerating ? 'Generating...' : 'Generate curriculum'}
+            {isGenerating ? 'Generating...' : 'Create My Learning Path'}
           </button>
           {generationStatus && <p className="status-note">{generationStatus}</p>}
         </form>
@@ -433,8 +439,11 @@ function App() {
       <header className="app-header">
         <div>
           <div className="brand compact">
-            <Sparkles size={20} />
-            <strong>Charioteer</strong>
+            <img
+              className="brand-logo brand-logo-compact"
+              src="/charioteer-logo.png"
+              alt="Charioteer"
+            />
           </div>
           <h1>{appState.intake.topic}</h1>
           <p>

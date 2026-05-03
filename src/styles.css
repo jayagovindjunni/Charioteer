@@ -53,10 +53,7 @@ p {
 }
 
 .brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  color: #77d8ad;
+  display: block;
   margin-bottom: 28px;
 }
 
@@ -64,18 +61,51 @@ p {
   margin-bottom: 12px;
 }
 
+.brand-logo {
+  display: block;
+  width: min(88vw, 320px);
+  height: auto;
+}
+
+.brand-logo-compact {
+  width: min(52vw, 200px);
+}
+
 .intake-copy h1 {
   font-size: clamp(2rem, 4vw, 4.6rem);
   line-height: 1.02;
   max-width: 760px;
-  margin-bottom: 22px;
+  margin-bottom: 16px;
 }
 
 .intake-copy p {
-  color: #bdd4cb;
   max-width: 620px;
   font-size: 1.05rem;
   line-height: 1.65;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.intake-copy .intake-subhead {
+  color: #f0faf5;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  font-weight: 600;
+  line-height: 1.45;
+  margin-bottom: 18px;
+}
+
+.intake-copy .intake-tagline {
+  color: #e4c98a;
+  font-size: 0.98rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.55;
+  margin-bottom: 20px;
+}
+
+.intake-copy .intake-body {
+  color: #bdd4cb;
+  margin-bottom: 0;
 }
 
 .intake-form {
