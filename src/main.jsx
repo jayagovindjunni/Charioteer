@@ -19,6 +19,39 @@ import './styles.css';
 import { BrandNav } from './BrandNav.jsx';
 
 const STORAGE_KEY = 'charioteer-curriculum-v2';
+const SPLASH_HOLD_MS = 2400;
+const SPLASH_TRANSITION_MS = 700;
+
+function useSplashIntro() {
+  const skipSplashIntro = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }, []);
+  const [introPhase, setIntroPhase] = useState(skipSplashIntro ? 'done' : 'splash');
+
+  useEffect(() => {
+    if (skipSplashIntro) return undefined;
+    if (introPhase !== 'splash') return undefined;
+    const id = window.setTimeout(() => setIntroPhase('exiting'), SPLASH_HOLD_MS);
+    return () => window.clearTimeout(id);
+  }, [introPhase, skipSplashIntro]);
+
+  useEffect(() => {
+    if (skipSplashIntro) return undefined;
+    if (introPhase !== 'exiting') return undefined;
+    const id = window.setTimeout(() => setIntroPhase('done'), SPLASH_TRANSITION_MS);
+    return () => window.clearTimeout(id);
+  }, [introPhase, skipSplashIntro]);
+
+  useEffect(() => {
+    if (skipSplashIntro) return undefined;
+    if (introPhase === 'done') return undefined;
+    document.documentElement.classList.add('splash-lock');
+    return () => document.documentElement.classList.remove('splash-lock');
+  }, [introPhase, skipSplashIntro]);
+
+  return { introPhase, skipSplashIntro };
+}
 
 const intakeDefaults = {
   topic: '',
@@ -137,6 +170,7 @@ function App() {
     confused: '',
     energy: 3
   });
+  const { introPhase, skipSplashIntro } = useSplashIntro();
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
@@ -316,8 +350,8 @@ function App() {
     }));
   }
 
-  if (screen === 'intake') {
-    return (
+  const mainContent =
+    screen === 'intake' ? (
       <main className="intake-page">
         <section className="intake-copy">
           <header className="intake-brand-bar" aria-label="Charioteer">
@@ -340,7 +374,7 @@ function App() {
           <label className="wide">
             What do you want to master?
             <input
-              autoFocus
+              autoFocus={introPhase === 'done'}
               placeholder="Example: Python for data analysis, machine learning, React, finance..."
               value={appState.intake.topic}
               onChange={(event) => updateIntake('topic', event.target.value)}
@@ -430,10 +464,7 @@ function App() {
           {generationStatus && <p className="status-note">{generationStatus}</p>}
         </form>
       </main>
-    );
-  }
-
-  return (
+    ) : (
     <main className="curriculum-page">
       <header className="app-header">
         <div>
@@ -659,6 +690,28 @@ function App() {
         </section>
       )}
     </main>
+    );
+
+  return (
+    <>
+      {!skipSplashIntro && introPhase !== 'done' ? (
+        <div
+          className={`splash-screen ${introPhase === 'exiting' ? 'splash-screen--exit' : ''}`}
+          aria-hidden="true"
+        >
+          <div className="splash-screen__inner">
+            <img
+              src="/charioteer-splash.png"
+              alt=""
+              width={288}
+              height={288}
+              className="splash-screen__art"
+            />
+          </div>
+        </div>
+      ) : null}
+      <div className={`app-shell ${introPhase !== 'splash' ? 'app-shell--ready' : ''}`}>{mainContent}</div>
+    </>
   );
 }
 
