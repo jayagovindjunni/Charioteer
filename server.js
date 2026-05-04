@@ -601,7 +601,7 @@ async function attachCuratedVideos(curriculum, intake) {
     candidatesByDay,
     preferredLanguage: normalized.preferredLanguage,
     topic: normalized.topic
-  });
+  }).catch(() => []);
   for (const selection of selections) {
     if (selection?.dayId) selectionByDay.set(selection.dayId, selection);
   }
@@ -677,6 +677,19 @@ async function generateWithProvider(intake, journal = []) {
     : callGemini(intake, journal);
 }
 
+async function attachVideosSafely(curriculum, intake) {
+  try {
+    return {
+      curriculum: await attachCuratedVideos(curriculum, intake)
+    };
+  } catch (error) {
+    return {
+      curriculum,
+      videoError: friendlyError(error.message)
+    };
+  }
+}
+
 app.get('/api/health', (_request, response) => {
   response.json({
     ok: true,
@@ -693,15 +706,15 @@ app.get('/api/health', (_request, response) => {
 app.post('/api/generate-plan', async (request, response) => {
   try {
     const result = await generateWithProvider(request.body.intake, []);
-    const curriculum = await attachCuratedVideos(result.curriculum || [], request.body.intake || {});
-    response.json({ ...result, curriculum });
+    const videoResult = await attachVideosSafely(result.curriculum || [], request.body.intake || {});
+    response.json({ ...result, ...videoResult });
   } catch (error) {
     const draft = localCurriculum(request.body.intake, []);
-    const curriculum = await attachCuratedVideos(draft, request.body.intake || {});
+    const videoResult = await attachVideosSafely(draft, request.body.intake || {});
     response.json({
       source: 'ai-error-fallback',
       error: friendlyError(error.message),
-      curriculum
+      ...videoResult
     });
   }
 });
@@ -709,15 +722,15 @@ app.post('/api/generate-plan', async (request, response) => {
 app.post('/api/recalculate-plan', async (request, response) => {
   try {
     const result = await generateWithProvider(request.body.intake, request.body.journal || []);
-    const curriculum = await attachCuratedVideos(result.curriculum || [], request.body.intake || {});
-    response.json({ ...result, curriculum });
+    const videoResult = await attachVideosSafely(result.curriculum || [], request.body.intake || {});
+    response.json({ ...result, ...videoResult });
   } catch (error) {
     const draft = localCurriculum(request.body.intake, request.body.journal || []);
-    const curriculum = await attachCuratedVideos(draft, request.body.intake || {});
+    const videoResult = await attachVideosSafely(draft, request.body.intake || {});
     response.json({
       source: 'ai-error-fallback',
       error: friendlyError(error.message),
-      curriculum
+      ...videoResult
     });
   }
 });
